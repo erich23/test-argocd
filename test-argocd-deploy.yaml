@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: test-app
+  namespace: sample
+  labels:
+    heritage: navops
+spec:
+  destination:
+    namespace: sample
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    helm:
+      parameters:
+      - name: "param1"
+        value: value1
+      values: |
+        param1: value2
+      valuesFile:
+      - values-file-1.yaml
+      - values-file-2.yaml
+    path: charts/test-chart
+    repoURL: git@github.com:erich23/test-argocd.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
